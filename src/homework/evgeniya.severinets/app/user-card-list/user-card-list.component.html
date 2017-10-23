@@ -1,5 +1,0 @@
-<ul class="users-list">
-  <li *ngFor="let user of users" (click)="onSelect(user)" [class.selected]="user === selectedUser" class="user-item">
-    <app-user-card-item [user] = user (remove) = "removeFromArray(user)"></app-user-card-item>
-  </li>
-</ul>
