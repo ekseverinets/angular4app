@@ -1,5 +1,16 @@
+<div class="user-form-wrapper">
+  <form class="user-form">
+    <mat-form-field>
+      <input matInput placeholder="User name" #userName>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="User role" #userRole>
+    </mat-form-field>
+  </form>
+  <button mat-button (click) = "addToUsers(userName.value, userRole.value); userName.value = ''; userRole.value = '';">Click me!</button>
+</div>
 <ul class="users-list">
   <li *ngFor="let user of users" (click)="onSelect(user)" [class.selected]="user === selectedUser" class="user-item">
-    <app-user-card-item [user] = user (remove) = "removeFromArray(user)"></app-user-card-item>
+    <app-user-card-item [user] = user (remove) = "removeFromUsers(user)"></app-user-card-item>
   </li>
 </ul>

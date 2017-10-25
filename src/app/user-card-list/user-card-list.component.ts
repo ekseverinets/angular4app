@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { UserService } from '../user/user.service';
 
 @Component({
   selector: 'app-user-card-list',
@@ -8,26 +9,34 @@ import { Component, OnInit, Input } from '@angular/core';
 
 export class UserCardListComponent implements OnInit {
 
-  @Input() users;
-
   public selectedUser: User;
+  public users;
 
-  constructor() { }
+  constructor(private _userService: UserService) { }
 
   onSelect(user: User) {
     this.selectedUser = user;
   }
 
-  removeFromArray(user) {
-    console.log(user);
-    for (let i = 0; i < this.users.length; i++) {
-      if (this.users[i] === user) {
-        this.users.splice(i, 1);
-      }
-    }
+  ngOnInit() {
+    this.users = this._userService.getAll();
   }
 
-  ngOnInit() {
+  removeFromUsers(user: User) {
+    this._userService.remove(user);
+    this.users = this._userService.getAll();
+  }
+
+  addToUsers(name: string, role: string) {
+    if (!name) {
+      return;
+    }
+    const user = {
+      name,
+      role
+    };
+    this._userService.add(user);
+    this.users = this._userService.getAll();
   }
 
 }
