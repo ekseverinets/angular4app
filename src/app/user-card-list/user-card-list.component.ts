@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from '../user/user.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-user-card-list',
@@ -10,33 +11,38 @@ import { UserService } from '../user/user.service';
 export class UserCardListComponent implements OnInit {
 
   public selectedUser: User;
-  public users;
+  public users: User[];
 
-  constructor(private _userService: UserService) { }
+  user: any = {};
+
+  constructor(private _userService: UserService) {
+  }
 
   onSelect(user: User) {
     this.selectedUser = user;
   }
 
   ngOnInit() {
-    this.users = this._userService.getAll();
+    this._userService.getAll().subscribe((users: User[]) => {
+      console.log(users);
+      this.users = users;
+    });
   }
 
-  removeFromUsers(user: User) {
-    this._userService.remove(user);
-    this.users = this._userService.getAll();
+  removeFromUsers(user: User, index: number) {
+    this._userService.remove(user)
+      .subscribe(() => this.users.splice(index, 1),
+        (err) => console.log(err));
   }
 
-  addToUsers(name: string, role: string) {
-    if (!name) {
+  addToUsers() {
+    if (!this.user.fullName && !this.user.email) {
       return;
     }
-    const user = {
-      name,
-      role
-    };
-    this._userService.add(user);
-    this.users = this._userService.getAll();
+    console.log(this.user);
+    this._userService.add(this.user).subscribe((res) => {
+      console.log(res.users);
+      this.users = this.users.concat(res.users);
+    });
   }
-
 }

@@ -1,46 +1,28 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+
+import 'rxjs/add/operator/map';
+
+@Injectable()
+
 export class UserService {
 
-  private USERS: User[] = [
-    {
-      name: 'Inna Corman',
-      role: 'Project Manager'
-    },
-    {
-      name: 'Vincent Porter',
-      role: 'Front-end developer'
-    },
-    {
-      name: 'Irina Nils',
-      role: 'HR manager'
-    },
-    {
-      name: 'Peter Sun',
-      role: 'Java specialist'
-    },
-    {
-      name: 'Ann Monic',
-      role: 'UI developer'
-    }
-  ];
+  constructor(private _http: HttpClient) { }
 
-  constructor() { }
-
-  public getAll() {
-    return this.USERS;
+  public getAll(): Observable<any> {
+    return this._http.get('http://test-api.javascript.ru/v1/iliakan/users');
   }
 
-  public remove(user: User) {
-    console.log(user);
-    for (let i = 0; i < this.USERS.length; i++) {
-      if (this.USERS[i] === user) {
-        this.USERS.splice(i, 1);
-      }
-    }
+  public remove(user: User): Observable<any> {
+    return this._http.delete(`http://test-api.javascript.ru/v1/iliakan/users/${user._id}`);
   }
 
-  public add(user: User) {
-    this.USERS.push(user);
+  public add(user: User): Observable<any> {
+    const body: any = {
+      users: [user],
+    };
+    console.log(body);
+    return this._http.post('http://test-api.javascript.ru/v1/iliakan', body);
   }
-
-
 }
